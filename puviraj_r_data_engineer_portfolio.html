@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puviraj R | Data Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; /* Deep Slate Background */
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        .text-accent { color: #10b981; } 
+        .bg-accent { background-color: #10b981; }
+        
+        /* Creative Asymmetrical Cards */
+        .creative-card {
+            background-color: #0f172a; 
+            border: 1px solid #1e293b;
+            /* Breaks the boring rectangle rule: Large rounded corners on TL/BR, small on TR/BL */
+            border-radius: 2rem 0.5rem 2rem 0.5rem; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .creative-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .creative-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 15px 30px -10px rgba(16, 185, 129, 0.15);
+        }
+
+        .creative-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Timeline styling for Experience (No boxes) */
+        .timeline-container {
+            border-left: 2px dashed #1e293b;
+            padding-left: 2rem;
+            margin-left: 1rem;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -2.4rem;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 0 0 15px #10b981, 0 0 5px white inset;
+        }
+
+        .tech-tag {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Floating background orbs for visual depth */
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-200">
+
+    <canvas id="bg-canvas"></canvas>
+    <div class="bg-orb w-96 h-96 bg-emerald-600/20 top-20 left-[-10%]"></div>
+    <div class="bg-orb w-[30rem] h-[30rem] bg-blue-600/10 bottom-20 right-[-10%]"></div>
+
+    <nav class="fixed w-full z-50 bg-[#020617]/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="font-bold text-xl tracking-tight flex items-center gap-2 text-white">
+                <i class="fa-solid fa-bolt text-accent"></i>
+                <span>Puviraj.R</span>
+            </div>
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
+                <a href="#impact" class="hover:text-accent transition">Impact</a>
+                <a href="#experience" class="hover:text-accent transition">Experience</a>
+                <a href="#projects" class="hover:text-accent transition">Projects</a>
+                <a href="#value" class="hover:text-accent transition">Value Proposition</a>
+            </div>
+            <a href="#contact" class="text-accent border border-accent px-4 py-1.5 rounded-full text-sm hover:bg-accent hover:text-slate-900 transition font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]">Contact</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 pt-32 pb-20 relative">
+        
+        <section class="min-h-[50vh] flex flex-col justify-center reveal relative z-10">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-accent font-semibold tracking-widest uppercase text-xs mb-6 w-max">
+                <i class="fa-solid fa-location-dot"></i> Coimbatore, Tamilnadu, India
+            </span>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight">
+                Data Analyst <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">& Data Engineer</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed">
+                I build Python frameworks and ETL pipelines that process high-volume, complex datasets. Specializing in IoT telemetry and scalable systems, I focus on automating workflows, reducing manual effort by 60%, and engineering data for enterprise analytics.
+            </p>
+            
+            <div class="flex flex-wrap gap-4 mb-8">
+                <!-- Resume Download (Needs your drive link) -->
+                <a href="#" class="bg-accent text-slate-900 px-6 py-3 rounded-2xl font-bold hover:bg-emerald-400 transition flex items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                    <i class="fa-solid fa-file-arrow-down"></i> Download Resume
+                </a>
+                <!-- GitHub Profile -->
+                <a href="https://github.com/Puviraj7" target="_blank" class="bg-slate-800/50 backdrop-blur-sm text-white border border-slate-700 px-6 py-3 rounded-2xl font-medium hover:border-slate-500 hover:bg-slate-800 transition flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+                <!-- LinkedIn Profile -->
+                <a href="https://linkedin.com/in/puviraj-r-8a648016b" target="_blank" class="bg-slate-800/50 backdrop-blur-sm text-white border border-slate-700 px-6 py-3 rounded-2xl font-medium hover:border-slate-500 hover:bg-slate-800 transition flex items-center gap-2">
+                    <i class="fa-brands fa-linkedin-in text-[#0a66c2]"></i> LinkedIn
+                </a>
+            </div>
+            
+            <!-- Quick Contact Links -->
+            <div class="flex flex-wrap items-center gap-6 text-sm text-slate-400 font-medium">
+                <!-- Mailto Link -->
+                <a href="mailto:puvirajpuvi2309@gmail.com" target="_blank" class="hover:text-accent transition flex items-center gap-2 bg-slate-900/50 py-2 px-4 rounded-full border border-slate-800">
+                    <i class="fa-regular fa-envelope text-emerald-500"></i> puvirajpuvi2309@gmail.com
+                </a>
+                <!-- WhatsApp Link -->
+                <a href="https://wa.me/916374913771" target="_blank" class="hover:text-accent transition flex items-center gap-2 bg-slate-900/50 py-2 px-4 rounded-full border border-slate-800">
+                    <i class="fa-brands fa-whatsapp text-emerald-500 text-lg"></i> +91 6374913771
+                </a>
+            </div>
+        </section>
+
+        <section id="impact" class="py-24 reveal relative">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-6">Scalable Systems & Outcomes</h2>
+                    <div class="space-y-6 text-slate-400">
+                        <p>I specialize in transforming messy, high-volume datasets into clean, analytics-ready pipelines.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-emerald-900/50 border border-emerald-500/30 flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fa-solid fa-bolt text-accent text-xs"></i>
+                                </div> 
+                                <span>Automated <strong>100k+ point processing</strong> in <2 mins.</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-emerald-900/50 border border-emerald-500/30 flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fa-solid fa-clock-rotate-left text-accent text-xs"></i>
+                                </div> 
+                                <span>Compressed onboarding from <strong>3 months to 1.5 months</strong>.</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-emerald-900/50 border border-emerald-500/30 flex items-center justify-center flex-shrink-0 mt-1">
+                                    <i class="fa-solid fa-users text-accent text-xs"></i>
+                                </div> 
+                                <span>Led 6-member team on <strong>multi-client deployments</strong>.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h4 class="text-slate-200 font-semibold mb-4 text-sm tracking-wider uppercase">Core Stack</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag">Python (Pandas, RapidFuzz)</span>
+                            <span class="tech-tag">SQL (MySQL, PostgreSQL)</span>
+                            <span class="tech-tag">Power BI (DAX)</span>
+                            <span class="tech-tag">Excel (VBA)</span>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <h4 class="text-slate-200 font-semibold mb-4 text-sm tracking-wider uppercase text-blue-400">Currently Upskilling</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-900/40 to-cyan-900/40 text-blue-300 border border-blue-700/50 uppercase tracking-widest shadow-[0_0_10px_rgba(59,130,246,0.1)]">PySpark</span>
+                            <span class="px-4 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-900/40 to-cyan-900/40 text-blue-300 border border-blue-700/50 uppercase tracking-widest shadow-[0_0_10px_rgba(59,130,246,0.1)]">Machine Learning</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="creative-card p-6 p-8">
+                    <h4 class="text-white font-bold mb-1 text-xl">Process Optimization</h4>
+                    <p class="text-xs text-emerald-400 mb-6 tracking-widest uppercase font-semibold">Time saved via Python automation</p>
+                    <div style="height: 300px;"><canvas id="impactChart"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="py-24 reveal">
+            <h2 class="text-3xl font-bold text-white mb-16 text-center">Professional Experience</h2>
+            
+            <div class="max-w-3xl mx-auto timeline-container">
+                
+                <!-- Timeline Item 1 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="bg-gradient-to-br from-slate-900 to-[#0f172a] p-8 rounded-3xl rounded-tl-none border border-slate-800 shadow-xl relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-colors"></div>
+                        
+                        <h3 class="text-2xl font-bold text-white">Associate Energy Analyst</h3>
+                        <p class="text-accent font-medium mt-1">Nectar Building Technologies • Jan 2025 - Present</p>
+                        
+                        <ul class="mt-6 space-y-4 text-slate-400 text-sm leading-relaxed">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-arrow-right text-emerald-500/50 mt-1 text-xs"></i> 
+                                <span>Delivered end-to-end BMS and IoT data onboarding across 100+ sites for 10+ enterprise clients.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-arrow-right text-emerald-500/50 mt-1 text-xs"></i> 
+                                <span>Built Python Automation Engine processing 100k+ points, compressing timelines from 3 months to 1.5 months.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-arrow-right text-emerald-500/50 mt-1 text-xs"></i> 
+                                <span>Leads a 6-member analytics team, managing sprint planning, task assignment, and client escalations.</span>
+                            </li>
+                            <li class="flex items-start gap-3 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50 text-slate-300">
+                                <i class="fa-solid fa-plane-departure text-accent mt-0.5"></i> 
+                                <span><strong>UAE Onsite Deployment (3 Months):</strong> Led direct client coordination and stakeholder meetings in Dubai, translating real-time field operations and application requirements into actionable data strategies.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-arrow-right text-emerald-500/50 mt-1 text-xs"></i> 
+                                <span>Prepared validated datasets that power live Energy KPI dashboards and Operational reporting.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 2 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="background: #64748b; box-shadow: 0 0 10px #64748b;"></div>
+                    <div class="bg-[#0f172a] p-8 rounded-3xl rounded-tl-none border border-slate-800 relative opacity-80 hover:opacity-100 transition-opacity">
+                        <h3 class="text-xl font-bold text-white">Relationship Manager</h3>
+                        <p class="text-slate-400 font-medium mt-1">PNB MetLife Insurance • 2023 - 2025</p>
+                        <ul class="mt-4 space-y-3 text-slate-400 text-sm leading-relaxed">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-caret-right text-slate-500 mt-0.5"></i> 
+                                <span>Managed a portfolio of 10,000+ customer accounts; applied behavioural trend analysis and data segmentation.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-caret-right text-slate-500 mt-0.5"></i> 
+                                <span>Produced structured performance reports and business analysis summaries to support operational decision-making.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-24 reveal">
+            <h2 class="text-3xl font-bold text-white mb-16 text-center">Projects & Architectures</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- Project 1 -->
+                <div class="creative-card p-8 flex flex-col h-full group z-10">
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">BMS Point Mapping Automation Engine</h3>
+                    <div class="flex gap-2 mb-6 flex-wrap">
+                        <span class="text-[10px] text-accent font-bold tracking-widest uppercase bg-emerald-900/30 px-2 py-1 rounded">Python, Pandas, RapidFuzz</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                        Engineered a scalable ETL architecture using a 5-stage fuzzy matching framework to standardize BMS data. Processes 100,000+ data points in under 2 minutes, resolving naming convention discrepancies across heterogeneous systems.
+                    </p>
+                    <p class="text-slate-500 text-xs font-medium leading-relaxed mt-auto border-t border-slate-800 pt-4">
+                        <i class="fa-solid fa-chart-line text-emerald-500 mr-1"></i> Significantly reduced manual data reconciliation latency and improved downstream data integrity.
+                    </p>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="creative-card p-8 flex flex-col h-full group z-10" style="border-radius: 0.5rem 2rem 0.5rem 2rem;">
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Project Management Tool <span class="text-sm font-normal text-slate-500">(In Progress)</span></h3>
+                    <div class="flex gap-2 mb-6 flex-wrap">
+                        <span class="text-[10px] text-blue-400 font-bold tracking-widest uppercase bg-blue-900/30 px-2 py-1 rounded">Workflow Automation</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                        Architecting a centralized operational suite to track agile sprints, resource allocation, and client escalations for a 6-member data team. Designed to replace siloed tracking sheets with a unified relational schema.
+                    </p>
+                    <p class="text-slate-500 text-xs font-medium leading-relaxed mt-auto border-t border-slate-800 pt-4">
+                        <i class="fa-solid fa-bullseye text-blue-500 mr-1"></i> Aims to optimize workflow throughput and automate operational reporting for management.
+                    </p>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="creative-card p-8 flex flex-col h-full group z-10" style="border-radius: 0.5rem 2rem 0.5rem 2rem;">
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Daily Activity Tracker</h3>
+                    <div class="flex gap-2 mb-6 flex-wrap">
+                        <span class="text-[10px] text-purple-400 font-bold tracking-widest uppercase bg-purple-900/30 px-2 py-1 rounded">Flutter, Excel/PDF Pipeline</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                        Developed an offline-first mobile data collection pipeline that streamlines team field logging. Engineered an automated export engine that structures raw daily logs into standardized Excel/PDF reports.
+                    </p>
+                    <p class="text-slate-500 text-xs font-medium leading-relaxed mt-auto border-t border-slate-800 pt-4">
+                        <i class="fa-solid fa-scissors text-purple-500 mr-1"></i> Cut administrative overhead by 40% and ensured consistent operational data capture.
+                    </p>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="creative-card p-8 flex flex-col h-full group z-10">
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Global Climate & Energy Dashboard</h3>
+                    <div class="flex gap-2 mb-6 flex-wrap">
+                        <span class="text-[10px] text-yellow-400 font-bold tracking-widest uppercase bg-yellow-900/30 px-2 py-1 rounded">Power BI, DAX, Looker Studio</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                        Engineered interactive, multi-year energy dashboards featuring custom DAX calculations and sophisticated drill-down relational data models. Aggregated disparate data sources to visualize global energy consumption trends.
+                    </p>
+                    <p class="text-slate-500 text-xs font-medium leading-relaxed mt-auto border-t border-slate-800 pt-4">
+                        <i class="fa-solid fa-lightbulb text-yellow-500 mr-1"></i> Delivered high-level strategic insights tailored for enterprise stakeholders.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="value" class="py-24 reveal">
+            <h2 class="text-3xl font-bold text-white mb-12 text-center">Value Proposition: Why Me?</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Prop 1 -->
+                <div class="bg-gradient-to-b from-[#0f172a] to-[#020617] border border-slate-800 p-8 rounded-t-[3rem] rounded-b-xl text-center hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                        <i class="fa-solid fa-bridge-water text-accent text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold mb-3 text-lg">The Technical Bridge</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">I reconcile the gap between physical building hardware, operational teams, and enterprise analytics platforms to create scalable infrastructure.</p>
+                </div>
+                
+                <!-- Prop 2 -->
+                <div class="bg-gradient-to-b from-[#0f172a] to-[#020617] border border-slate-800 p-8 rounded-[2rem] text-center hover:-translate-y-2 transition-transform duration-300 scale-105 shadow-2xl relative z-10 border-emerald-900/50">
+                    <div class="absolute inset-0 bg-emerald-500/5 rounded-[2rem] pointer-events-none"></div>
+                    <div class="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                        <i class="fa-solid fa-lightbulb text-accent text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold mb-3 text-lg">Outcome-First</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">I don't just process data; I engineer insights. I ask "what decision does this enable?" before writing a single line of code.</p>
+                </div>
+                
+                <!-- Prop 3 -->
+                <div class="bg-gradient-to-b from-[#0f172a] to-[#020617] border border-slate-800 p-8 rounded-b-[3rem] rounded-t-xl text-center hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                        <i class="fa-solid fa-network-wired text-accent text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold mb-3 text-lg">Scalable Systems</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">I build repeatable frameworks and automation pipelines that eliminate manual rework and drive portfolio-wide efficiency.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="contact" class="bg-[#020617] py-16 border-t border-slate-800 relative z-10 overflow-hidden">
+        <!-- Subtle footer glow -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[40rem] h-[10rem] bg-emerald-500/5 blur-3xl rounded-full"></div>
+        
+        <div class="max-w-6xl mx-auto px-6 text-center text-slate-400 relative z-10">
+            <h3 class="text-white text-2xl font-bold mb-6">Ready to Build Scalable Systems?</h3>
+            <p class="text-lg mb-2">
+                <a href="mailto:puvirajpuvi2309@gmail.com" target="_blank" class="hover:text-accent transition flex items-center justify-center gap-2">
+                    <i class="fa-regular fa-envelope"></i> puvirajpuvi2309@gmail.com
+                </a>
+            </p>
+            <p class="text-lg mb-10">
+                <a href="https://wa.me/916374913771" target="_blank" class="hover:text-accent transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp"></i> +91 6374913771
+                </a>
+            </p>
+            
+            <div class="flex justify-center gap-6">
+                <a href="https://github.com/Puviraj7" target="_blank" class="w-12 h-12 rounded-2xl bg-[#0f172a] flex items-center justify-center hover:bg-emerald-500 hover:text-slate-900 hover:-translate-y-1 transition-all text-white border border-slate-700 shadow-lg">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+                <a href="https://linkedin.com/in/puviraj-r-8a648016b" target="_blank" class="w-12 h-12 rounded-2xl bg-[#0f172a] flex items-center justify-center hover:bg-emerald-500 hover:text-slate-900 hover:-translate-y-1 transition-all text-white border border-slate-700 shadow-lg">
+                    <i class="fa-brands fa-linkedin-in text-xl"></i>
+                </a>
+            </div>
+            <p class="text-xs text-slate-600 mt-16 tracking-wider uppercase font-medium">© 2026 Puviraj R. Designed for Data Engineering.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Setup Chart
+        const ctx = document.getElementById('impactChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Timeline', 'Data Recon'],
+                datasets: [
+                    { label: 'Original', data: [90, 72], backgroundColor: '#1e293b', borderRadius: 6 }, // Slate 800
+                    { label: 'Optimized', data: [45, 8], backgroundColor: '#10b981', borderRadius: 6 }  // Emerald 500
+                ]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: {
+                    legend: { labels: { color: '#94a3b8', font: { family: 'Inter', weight: '500' } } }
+                },
+                scales: { 
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: 'rgba(30, 41, 59, 0.5)' }, // Subtle slate
+                        ticks: { color: '#64748b' }
+                    }, 
+                    x: { 
+                        grid: { display: false },
+                        ticks: { color: '#64748b' }
+                    } 
+                } 
+            }
+        });
+
+        // Setup Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active'); 
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Setup Canvas Background (Data Network Mesh)
+        const canvas = document.getElementById('bg-canvas');
+        const c = canvas.getContext('2d');
+        let particles = [];
+        
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = Array.from({length: 60}, () => ({
+                x: Math.random()*canvas.width, 
+                y: Math.random()*canvas.height, 
+                vx: (Math.random()-0.5) * 0.4, 
+                vy: (Math.random()-0.5) * 0.4
+            }));
+        }
+
+        function draw() {
+            c.clearRect(0,0, canvas.width, canvas.height);
+            
+            // Draw lines between close particles (Data Network effect)
+            for(let i=0; i<particles.length; i++) {
+                for(let j=i+1; j<particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if(dist < 180) {
+                        c.beginPath();
+                        c.strokeStyle = `rgba(16, 185, 129, ${0.15 - dist/1200})`; 
+                        c.lineWidth = 1;
+                        c.moveTo(particles[i].x, particles[i].y);
+                        c.lineTo(particles[j].x, particles[j].y);
+                        c.stroke();
+                    }
+                }
+            }
+
+            c.fillStyle = '#10b981'; 
+            particles.forEach(p => {
+                p.x += p.vx; 
+                p.y += p.vy;
+                if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                c.beginPath(); 
+                c.arc(p.x, p.y, 1.5, 0, Math.PI*2); 
+                c.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+        
+        initCanvas(); 
+        draw();
+        window.addEventListener('resize', initCanvas);
+    </script>
+</body>
+</html>
